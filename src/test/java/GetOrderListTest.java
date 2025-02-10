@@ -37,7 +37,7 @@ public class GetOrderListTest {
     @Test
     @DisplayName("Список заказов не пустой")
     @Description("После создания курьера, заказов и принятии заказа курьером в работу.")
-    public void checkResponseContainsOrdersList_ok(){
+    public void checkResponseContainsOrdersListTest_ok(){
         ValidatableResponse response = client.getOrders(idCourier);
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_OK,code);

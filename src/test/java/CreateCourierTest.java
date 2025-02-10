@@ -22,7 +22,7 @@ public class CreateCourierTest {
     @Test
     @DisplayName("Создание курьера")
     @Description("Базовая проверка на работоспособность")
-    public void createCourier_ok() {
+    public void createCourierTest_ok() {
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
         Assert.assertEquals(SC_CREATED, statusCode);
@@ -32,7 +32,7 @@ public class CreateCourierTest {
     @Test
     @DisplayName("Создание двух одинаковых курьеров")
     @Issue("Ссылкаа на БР про баг в тексте ответа")
-    public void createTwoSameCourier_fail() {
+    public void createTwoSameCourierTest_fail() {
         client.createCourier(courier);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
@@ -42,7 +42,7 @@ public class CreateCourierTest {
     }
     @Test
     @DisplayName("Создание курьера без login")
-    public void createNoNameCourier_fail() {
+    public void createNoNameCourierTest_fail() {
         courier.setLogin(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
@@ -52,7 +52,7 @@ public class CreateCourierTest {
     }
     @Test
     @DisplayName("Создание курьера без password")
-    public void createNoPasswordCourier_fail() {
+    public void createNoPasswordCourierTest_fail() {
         courier.setPassword(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
@@ -62,7 +62,7 @@ public class CreateCourierTest {
     }
     @Test
     @DisplayName("Создание курьера без firstName")
-    public void createNoFirstNameCourier_ok() {
+    public void createNoFirstNameCourierTest_ok() {
         courier.setFirstName(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);

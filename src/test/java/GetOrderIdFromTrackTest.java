@@ -28,7 +28,7 @@ public class GetOrderIdFromTrackTest {
     @Test
     @DisplayName("Получение заказа по его номеру")
     @Description("Базовый тест, трек не нулевой")
-    public void GetOrderWithExistingTrack_ok(){
+    public void GetOrderWithExistingTrackTest_ok(){
         ValidatableResponse response = client.getOrder(track);
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_OK,code);
@@ -37,7 +37,7 @@ public class GetOrderIdFromTrackTest {
     }
     @Test
     @DisplayName("Неполучение заказа без трек номера")
-    public void GetOrderWithoutTrack_fail(){
+    public void GetOrderWithoutTrackTest_fail(){
         ValidatableResponse response = client.getOrder(new Track());
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_BAD_REQUEST,code);
@@ -46,7 +46,7 @@ public class GetOrderIdFromTrackTest {
     }
     @Test
     @DisplayName("Неполучение заказа с несуществующим заказом")
-    public void GetOrderWithNoExistingTrack_fail(){
+    public void GetOrderWithNoExistingTrackTest_fail(){
         ValidatableResponse response = client.getOrder(new Track(77777777));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_NOT_FOUND,code);
