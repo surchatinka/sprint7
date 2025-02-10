@@ -24,18 +24,13 @@ public class LoginCourierTest {
 
     @Test
     @DisplayName("Успешная авторизация курьера")
-    @Description("Базовый тест на эндпоинт авторизации курьера, проверяет код ответа сервера")
+    @Description("Базовый тест на эндпоинт авторизации курьера")
     public void AuthorizationCourierTest_ok(){
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_OK,code);
-    }
-    @Test
-    @DisplayName("Возврат id при успешной авторизация")
-    public void AuthorizationReturnsIdCourierTest_ok(){
-        ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         String id = client.getIdFromAnswerBody(response);
-        Assert.assertNotEquals(0,id);
+        Assert.assertNotEquals("0",id);
     }
     @Test
     @DisplayName("Неуспешная авторизация курьера с неправильным логином")
