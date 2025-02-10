@@ -3,6 +3,7 @@ package client;
 import static io.restassured.RestAssured.given;
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
@@ -13,6 +14,13 @@ import java.util.List;
 public class ScooterServiceClient {
 
     private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
+    public static final String CREATE_COURIER_ENDPOINT = "/api/v1/courier";
+    public static final String LOGIN_COURIER_ENDPOINT = "/api/v1/courier/login";
+    public static final String DELETE_COURIER_ENDPOINT = "/api/v1/courier/%s";
+    public static final String CANCEL_ORDER_ENDPOINT = "/api/v1/orders/cancel";
+    public static final String GET_LIST_OF_ORDERS_ENDPOINT = "/api/v1/orders";
+    public static final String ACCEPT_ORDER_ENDPOINT = "/api/v1/orders/accept/%s";
+    public static final String GET_ORDER_ENDPOINT = "/api/v1/orders/track";
 
     public ScooterServiceClient() {}
 
@@ -23,9 +31,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
+                .basePath(CREATE_COURIER_ENDPOINT)
                 .body(courier)
-                .post("/api/v1/courier")
+                .post()
                 .then()
                 .log()
                 .all();
@@ -36,9 +45,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
+                .basePath(LOGIN_COURIER_ENDPOINT)
                 .body(credentials.toString())
-                .post("/api/v1/courier/login")
+                .post()
                 .then()
                 .log()
                 .all();
@@ -50,8 +60,9 @@ public class ScooterServiceClient {
                     .log()
                     .all()
                     .baseUri(BASE_URI)
-                    .header("Content-Type", "application/json")
-                    .delete(String.format("/api/v1/courier/%s",id)) //:
+                    .contentType(ContentType.JSON)
+                    .basePath(String.format(DELETE_COURIER_ENDPOINT,id))
+                    .delete()
                     .then()
                     .log()
                     .all();
@@ -62,9 +73,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type","application/json")
+                .contentType(ContentType.JSON)
+                .basePath("/api/v1/orders")
                 .body(order)
-                .post("/api/v1/orders")
+                .post()
                 .then()
                 .log()
                 .all();
@@ -76,9 +88,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
+                .basePath(CANCEL_ORDER_ENDPOINT)
                 .body(track)
-                .put("/api/v1/orders/cancel")
+                .put()
                 .then()
                 .log()
                 .all();
@@ -90,9 +103,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
+                .basePath(GET_LIST_OF_ORDERS_ENDPOINT)
                 .queryParam("courierId",courierId)
-                .get("/api/v1/orders")
+                .get()
                 .then()
                 .log()
                 .all();
@@ -103,9 +117,10 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
-                .header("Content-Type","application/json")
+                .contentType(ContentType.JSON)
+                .basePath(String.format(ACCEPT_ORDER_ENDPOINT,orderId))
                 .queryParam("courierId",courierId)
-                .put(String.format("/api/v1/orders/accept/%s",orderId))
+                .put()
                 .then()
                 .log()
                 .all();
@@ -116,8 +131,9 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(BASE_URI)
+                .basePath(GET_ORDER_ENDPOINT)
                 .queryParam("t",track.getTrack())
-                .get("/api/v1/orders/track")
+                .get()
                 .then()
                 .log()
                 .all();
