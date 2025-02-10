@@ -1,4 +1,6 @@
 import client.ScooterServiceClient;
+import io.qameta.allure.Allure;
+import io.qameta.allure.AllureLifecycle;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
@@ -32,18 +34,12 @@ public class MakeOrderTest {
 
     @Test
     @DisplayName("Создание заказа")
-    @Description("Базовый тест, если цвет самоката - %1")
     public void makeOrderTest_ok(){
+        AllureLifecycle lifecycle = Allure.getLifecycle();
+        lifecycle.updateTestCase(testResult -> testResult.setName("Создание заказа, самоката с цветом "+order.getColor().toString()));
         ValidatableResponse response = client.createOrder(order);
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_CREATED,code);
-        track = client.getTrackFromAnswerBody(response);
-
-    }
-    @Test
-    @DisplayName("В теле ответа при создании заказа возвращается трек номер, если цвет самоката - %1")
-    public void makeOrderTestReturnsTrackNumber_ok(){
-        ValidatableResponse response = client.createOrder(order);
         track = client.getTrackFromAnswerBody(response);
         Assert.assertNotNull(track);
     }
