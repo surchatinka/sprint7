@@ -1,13 +1,8 @@
 package model;
 
+import lombok.Data;
+@Data
 public class Track {
-    public int getTrack() {
-        return track;
-    }
-
-    public void setTrack(int track) {
-        this.track = track;
-    }
 
     public Track(int track) {
         this.track = track;
