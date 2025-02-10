@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
+import static org.apache.http.HttpStatus.*;
 import java.util.ArrayList;
 
 public class GetOrderIdFromTrackTest {
@@ -31,7 +31,7 @@ public class GetOrderIdFromTrackTest {
     public void GetOrderWithExistingTrack_ok(){
         ValidatableResponse response = client.getOrder(track);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(200,code);
+        Assert.assertEquals(SC_OK,code);
         Order order = client.getOrderFromAnswerBody(response);
         Assert.assertNotNull(order);
     }
@@ -40,7 +40,7 @@ public class GetOrderIdFromTrackTest {
     public void GetOrderWithoutTrack_fail(){
         ValidatableResponse response = client.getOrder(new Track());
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
@@ -49,7 +49,7 @@ public class GetOrderIdFromTrackTest {
     public void GetOrderWithNoExistingTrack_fail(){
         ValidatableResponse response = client.getOrder(new Track(77777777));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Заказ не найден",message);
     }

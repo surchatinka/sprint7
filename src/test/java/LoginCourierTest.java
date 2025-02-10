@@ -6,6 +6,7 @@ import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
 import org.junit.*;
+import static org.apache.http.HttpStatus.*;
 
 public class LoginCourierTest {
     private Courier courier;
@@ -27,7 +28,7 @@ public class LoginCourierTest {
     public void AuthorizationCourierTest_ok(){
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(200,code);
+        Assert.assertEquals(SC_OK,code);
     }
     @Test
     @DisplayName("Возврат id при успешной авторизация")
@@ -42,7 +43,7 @@ public class LoginCourierTest {
         courier.setLogin("ULTRANOGGEBATOR9000");
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Учетная запись не найдена");
     }
@@ -52,7 +53,7 @@ public class LoginCourierTest {
         courier.setPassword("ULTRANOGGEBATOR9000");
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Учетная запись не найдена");
     }
@@ -62,7 +63,7 @@ public class LoginCourierTest {
         courier.setLogin(null);
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Недостаточно данных для входа");
     }
@@ -73,7 +74,7 @@ public class LoginCourierTest {
         courier.setPassword(null);
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Недостаточно данных для входа");
     }
@@ -83,7 +84,7 @@ public class LoginCourierTest {
         client.deleteCourier(id);
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Учетная запись не найдена");
     }

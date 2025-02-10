@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
+import static org.apache.http.HttpStatus.*;
 
 public class CourierAcceptOrderTest {
 
@@ -41,7 +42,7 @@ public class CourierAcceptOrderTest {
     public void CourierAcceptOrderTest_ok(){
         ValidatableResponse response = client.acceptOrder(courierId,orderId);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(200,code);
+        Assert.assertEquals(SC_OK,code);
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
     }
@@ -50,7 +51,7 @@ public class CourierAcceptOrderTest {
     public void NoCourierIdAcceptOrderTest_fail(){
         ValidatableResponse response = client.acceptOrder("",orderId);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
@@ -60,7 +61,7 @@ public class CourierAcceptOrderTest {
         client.deleteCourier(courierId);
         ValidatableResponse response = client.acceptOrder(courierId,orderId);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Курьера с таким id не существует",message);
     }
@@ -70,7 +71,7 @@ public class CourierAcceptOrderTest {
     public void NoOrderIdAcceptOrderTest_fail(){
         ValidatableResponse response = client.acceptOrder(courierId,"");
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
@@ -79,7 +80,7 @@ public class CourierAcceptOrderTest {
     public void WrongOrderNameAcceptOrderTest_fail(){
         ValidatableResponse response = client.acceptOrder(courierId,orderId.substring(4));
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Заказа с таким id не существует",message);
     }

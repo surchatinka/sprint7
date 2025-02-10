@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
+import static org.apache.http.HttpStatus.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MakeOrderTest {
     public void makeOrderTest_ok(){
         ValidatableResponse response = client.createOrder(order);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(201,code);
+        Assert.assertEquals(SC_CREATED,code);
         track = client.getTrackFromAnswerBody(response);
 
     }

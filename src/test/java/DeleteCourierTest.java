@@ -8,6 +8,7 @@ import model.Credentials;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.apache.http.HttpStatus.*;
 
 public class DeleteCourierTest {
 
@@ -29,7 +30,7 @@ public class DeleteCourierTest {
     public void deleteCourierTest_ok(){
         ValidatableResponse response = client.deleteCourier(id);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(200,code);
+        Assert.assertEquals(SC_OK,code);
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
     }
@@ -40,7 +41,7 @@ public class DeleteCourierTest {
     public void deleteNoIdCourierTest_fail(){
         ValidatableResponse response = client.deleteCourier("");
         int code = client.getStatusCode(response);
-        Assert.assertEquals(400,code);
+        Assert.assertEquals(SC_BAD_REQUEST,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для удаления курьера",message);
         client.deleteCourier(id);
@@ -53,7 +54,7 @@ public class DeleteCourierTest {
         client.deleteCourier(id);
         ValidatableResponse response = client.deleteCourier("");
         int code = client.getStatusCode(response);
-        Assert.assertEquals(404,code);
+        Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Курьера с таким id нет",message);
     }

@@ -6,6 +6,7 @@ import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
 import org.junit.*;
+import static org.apache.http.HttpStatus.*;
 
 public class CreateCourierTest {
     private Courier courier;
@@ -24,7 +25,7 @@ public class CreateCourierTest {
     public void createCourier_ok() {
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
-        Assert.assertEquals(201, statusCode);
+        Assert.assertEquals(SC_CREATED, statusCode);
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
   }
@@ -35,7 +36,7 @@ public class CreateCourierTest {
         client.createCourier(courier);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
-        Assert.assertEquals(409, statusCode);
+        Assert.assertEquals(SC_CONFLICT, statusCode);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Этот логин уже используется");
     }
@@ -45,7 +46,7 @@ public class CreateCourierTest {
         courier.setLogin(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
-        Assert.assertEquals(400, statusCode);
+        Assert.assertEquals(SC_BAD_REQUEST, statusCode);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Недостаточно данных для создания учетной записи");
     }
@@ -55,7 +56,7 @@ public class CreateCourierTest {
         courier.setPassword(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
-        Assert.assertEquals(400, statusCode);
+        Assert.assertEquals(SC_BAD_REQUEST, statusCode);
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals(message,"Недостаточно данных для создания учетной записи");
     }
@@ -65,7 +66,7 @@ public class CreateCourierTest {
         courier.setFirstName(null);
         ValidatableResponse response = client.createCourier(courier);
         statusCode = client.getStatusCode(response);
-        Assert.assertEquals(201, statusCode);
+        Assert.assertEquals(SC_CREATED, statusCode);
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
     }

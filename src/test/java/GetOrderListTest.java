@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
+import static org.apache.http.HttpStatus.*;
 
 public class GetOrderListTest {
 
@@ -39,7 +40,7 @@ public class GetOrderListTest {
     public void checkResponseContainsOrdersList_ok(){
         ValidatableResponse response = client.getOrders(idCourier);
         int code = client.getStatusCode(response);
-        Assert.assertEquals(200,code);
+        Assert.assertEquals(SC_OK,code);
         List<Order> list = client.getOrderListFromAnswerBody(response);
         Assert.assertNotNull(list);
     }
