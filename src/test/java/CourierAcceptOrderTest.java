@@ -7,11 +7,15 @@ import model.Courier;
 import model.Credentials;
 import model.Order;
 import model.Track;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import static org.apache.http.HttpStatus.*;
 
 public class CourierAcceptOrderTest {
@@ -23,12 +27,23 @@ public class CourierAcceptOrderTest {
 
     @Before
     public void before(){
+        Faker faker = new Faker(new Locale("ru"));
         client = new ScooterServiceClient();
-        Courier courier = new Courier("Usein", "usya", "Bolt");
+        Courier courier = new Courier(faker.letterify("????")+faker.number().digits(2),
+                faker.number().digits(5),
+                faker.name().fullName());
         client.createCourier(courier);
         ValidatableResponse loginResponse = client.login(Credentials.fromCourier(courier));
         courierId = client.getIdFromAnswerBody(loginResponse);
-        Order order = new Order("Namezz", "Surnamezz", "Addrezz", "33", "+23400000001", 5, "2025-12-12", " ", new ArrayList<>());
+        Order order = new Order(faker.name().firstName(),
+                faker.name().lastName(),
+                faker.address().cityName(),
+                faker.number().digits(2),
+                faker.phoneNumber().phoneNumber(),
+                faker.number().numberBetween(1,7),
+                faker.date().future(30, TimeUnit.DAYS).toString(),
+                faker.letterify("??????text??????"),
+                new ArrayList<>());
         ValidatableResponse createOrderResponse = client.createOrder(order);
         track = client.getTrackFromAnswerBody(createOrderResponse);
         ValidatableResponse getIdResponse = client.getOrder(track);
@@ -78,7 +93,8 @@ public class CourierAcceptOrderTest {
     @Test
     @DisplayName("Непринятие заказа курьером, с неправильным номером заказа")
     public void WrongOrderNameAcceptOrderTest_fail(){
-        ValidatableResponse response = client.acceptOrder(courierId,orderId.substring(4));
+        Faker faker = new Faker();
+        ValidatableResponse response = client.acceptOrder(courierId,faker.number().digits(7));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);

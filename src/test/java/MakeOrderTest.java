@@ -6,6 +6,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.Order;
 import model.Track;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +16,8 @@ import org.junit.runners.Parameterized;
 import static org.apache.http.HttpStatus.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(Parameterized.class)
 public class MakeOrderTest {
@@ -24,8 +27,17 @@ public class MakeOrderTest {
     private Track track;
 
     public MakeOrderTest(List<String> colors){
-         order = new Order("Name","Surname","Address","3","+23445678901",3,"2025-12-12"," ", colors);
-    }
+        Faker faker = new Faker(new Locale("ru"));
+        order = new Order(faker.name().firstName(),
+                faker.name().lastName(),
+                faker.address().cityName(),
+                faker.number().digits(2),
+                faker.phoneNumber().phoneNumber(),
+                faker.number().numberBetween(1,7),
+                faker.date().future(30, TimeUnit.DAYS).toString(),
+                faker.letterify("??????text??????"),
+                new ArrayList<>());
+}
 
     @Before
     public void before(){
@@ -35,8 +47,6 @@ public class MakeOrderTest {
     @Test
     @DisplayName("Создание заказа")
     public void makeOrderTest_ok(){
-        AllureLifecycle lifecycle = Allure.getLifecycle();
-        lifecycle.updateTestCase(testResult -> testResult.setName("Создание заказа, самоката с цветом "+order.getColor().toString()));
         ValidatableResponse response = client.createOrder(order);
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_CREATED,code);

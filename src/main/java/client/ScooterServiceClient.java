@@ -42,6 +42,7 @@ public class ScooterServiceClient {
     @Step("Клиент – логин курьера")
     public ValidatableResponse login(Credentials credentials) {
         return given()
+                .filter(new AllureRestAssured())
                 .log()
                 .all()
                 .baseUri(BASE_URI)
@@ -70,6 +71,7 @@ public class ScooterServiceClient {
     @Step("Клиент - создание заказа")
     public ValidatableResponse createOrder(Order order){
         return given()
+                .filter(new AllureRestAssured())
                 .log()
                 .all()
                 .baseUri(BASE_URI)
@@ -114,6 +116,7 @@ public class ScooterServiceClient {
     @Step("Клиент - резирвирование заказа курьером")
     public ValidatableResponse acceptOrder(String courierId,String orderId){
         return given()
+                .filter(new AllureRestAssured())
                 .log()
                 .all()
                 .baseUri(BASE_URI)
@@ -128,6 +131,7 @@ public class ScooterServiceClient {
     @Step("Клиент - получение id заказа")
     public ValidatableResponse getOrder(Track track){
         return given()
+                .filter(new AllureRestAssured())
                 .log()
                 .all()
                 .baseUri(BASE_URI)

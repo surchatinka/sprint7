@@ -5,9 +5,13 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
+import net.datafaker.Faker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Locale;
+
 import static org.apache.http.HttpStatus.*;
 
 public class DeleteCourierTest {
@@ -18,7 +22,10 @@ public class DeleteCourierTest {
     @Before
     public void before(){
         client = new ScooterServiceClient();
-        Courier courier = new Courier("vasya90210","vasya","pupkin");
+        Faker faker = new Faker(new Locale("ru"));
+        Courier courier = new Courier(faker.letterify("????")+faker.number().digits(2),
+                faker.number().digits(5),
+                faker.name().fullName());
         client.createCourier(courier);
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         id = client.getIdFromAnswerBody(response);
@@ -48,7 +55,7 @@ public class DeleteCourierTest {
     }
 
     @Test
-    @DisplayName("Отправка запроса на удаление без id")
+    @DisplayName("Отправка запроса на удаление не существующего курьера")
     @Issue("Ссылка на баг репорт о неверном теле ответа")
     public void deleteNotExistingCourierTest_fail(){
         client.deleteCourier(id);

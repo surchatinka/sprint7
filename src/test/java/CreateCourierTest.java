@@ -5,7 +5,11 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
+import net.datafaker.Faker;
 import org.junit.*;
+
+import java.util.Locale;
+
 import static org.apache.http.HttpStatus.*;
 
 public class CreateCourierTest {
@@ -16,7 +20,10 @@ public class CreateCourierTest {
     @Before
     public void before(){
         client = new ScooterServiceClient();
-        courier = new Courier("jackson", "password", "peter");
+        Faker faker = new Faker(new Locale("ru"));
+        courier = new Courier(faker.letterify("????")+faker.number().digits(2),
+                faker.number().digits(5),
+                faker.name().fullName());
     }
 
     @Test

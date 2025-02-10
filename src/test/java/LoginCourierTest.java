@@ -5,7 +5,11 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.Courier;
 import model.Credentials;
+import net.datafaker.Faker;
 import org.junit.*;
+
+import java.util.Locale;
+
 import static org.apache.http.HttpStatus.*;
 
 public class LoginCourierTest {
@@ -15,8 +19,11 @@ public class LoginCourierTest {
 
     @Before
     public void before(){
+        Faker faker = new Faker(new Locale("ru"));
         client = new ScooterServiceClient();
-        courier = new Courier("jackson", "password", "peter");
+        courier = new Courier(faker.letterify("????")+faker.number().digits(2),
+                faker.number().digits(5),
+                faker.name().fullName());
         client.createCourier(courier);
         ValidatableResponse responseOriginal = client.login(Credentials.fromCourier(courier));
         id = client.getIdFromAnswerBody(responseOriginal);
@@ -35,7 +42,8 @@ public class LoginCourierTest {
     @Test
     @DisplayName("Неуспешная авторизация курьера с неправильным логином")
     public void AuthorizationMistakeInLoginCourierTest_fail(){
-        courier.setLogin("ULTRANOGGEBATOR9000");
+        Faker faker = new Faker(new Locale("ru"));
+        courier.setLogin(faker.letterify("????")+faker.number().digits(2));
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_NOT_FOUND,code);
@@ -45,7 +53,8 @@ public class LoginCourierTest {
     @Test
     @DisplayName("Неуспешная авторизация курьера с неправильным паролем")
     public void AuthorizationMistakeInPasswordCourierTest_fail(){
-        courier.setPassword("ULTRANOGGEBATOR9000");
+        Faker faker = new Faker(new Locale("ru"));
+        courier.setPassword(faker.number().digits(5));
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_NOT_FOUND,code);

@@ -4,12 +4,15 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.Order;
 import model.Track;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.apache.http.HttpStatus.*;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class GetOrderIdFromTrackTest {
 
@@ -19,10 +22,18 @@ public class GetOrderIdFromTrackTest {
     @Before
     public void before(){
         client = new ScooterServiceClient();
-        Order order= new Order("Platypus","Teal","Cartoon","7","82341111111",1,"2025-11-11","comment",new ArrayList<>());
+        Faker faker = new Faker(new Locale("ru"));
+        Order order = new Order(faker.name().firstName(),
+                faker.name().lastName(),
+                faker.address().cityName(),
+                faker.number().digits(2),
+                faker.phoneNumber().phoneNumber(),
+                faker.number().numberBetween(1,7),
+                faker.date().future(30, TimeUnit.DAYS).toString(),
+                faker.letterify("??????text??????"),
+                new ArrayList<>());
         ValidatableResponse responseCreate = client.createOrder(order);
         track = client.getTrackFromAnswerBody(responseCreate);
-
     }
 
     @Test
@@ -47,7 +58,8 @@ public class GetOrderIdFromTrackTest {
     @Test
     @DisplayName("Неполучение заказа с несуществующим заказом")
     public void GetOrderWithNoExistingTrackTest_fail(){
-        ValidatableResponse response = client.getOrder(new Track(77777777));
+        Faker faker = new Faker(new Locale("ru"));
+        ValidatableResponse response = client.getOrder(new Track((int)faker.number().randomNumber()));
         int code = client.getStatusCode(response);
         Assert.assertEquals(SC_NOT_FOUND,code);
         String message = client.getMessageFromAnswerBody(response);

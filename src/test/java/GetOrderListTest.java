@@ -6,12 +6,16 @@ import model.Courier;
 import model.Credentials;
 import model.Order;
 import model.Track;
+import net.datafaker.Faker;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import static org.apache.http.HttpStatus.*;
 
 public class GetOrderListTest {
@@ -22,12 +26,23 @@ public class GetOrderListTest {
 
     @Before
     public void before(){
+        Faker faker = new Faker(new Locale("ru"));
         client = new ScooterServiceClient();
-        Courier courier = new Courier("j4k4l","courier","COURIER");
+        Courier courier = new Courier(faker.letterify("????")+faker.number().digits(2),
+                faker.number().digits(5),
+                faker.name().fullName());
         client.createCourier(courier);
         ValidatableResponse responseLogin = client.login(Credentials.fromCourier(courier));
         idCourier = client.getIdFromAnswerBody(responseLogin);
-        Order order1= new Order("Some","Person","Hawaii","5","82345678901",1,"2025-10-10","buratto",new ArrayList<>());
+        Order order1 = new Order(faker.name().firstName(),
+                faker.name().lastName(),
+                faker.address().cityName(),
+                faker.number().digits(2),
+                faker.phoneNumber().phoneNumber(),
+                faker.number().numberBetween(1,7),
+                faker.date().future(30, TimeUnit.DAYS).toString(),
+                faker.letterify("??????text??????"),
+                new ArrayList<>());
         ValidatableResponse responseTrack = client.createOrder(order1);
         track = client.getTrackFromAnswerBody(responseTrack);
         ValidatableResponse responseId = client.getOrder(track);
