@@ -1,8 +1,6 @@
 package client;
 
 import static io.restassured.RestAssured.given;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.response.ValidatableResponse;
@@ -10,7 +8,6 @@ import model.Courier;
 import model.Credentials;
 import model.Order;
 import model.Track;
-
 import java.util.List;
 
 public class ScooterServiceClient {
@@ -101,7 +98,6 @@ public class ScooterServiceClient {
                 .then()
                 .log()
                 .all();
-
     }
     @Step("Клиент - резирвирование заказа курьером")
     public ValidatableResponse acceptOrder(String courierId,String orderId){
@@ -122,7 +118,6 @@ public class ScooterServiceClient {
                 .log()
                 .all()
                 .baseUri(baseURI)
-                //.header("Content-Type","application/json")
                 .queryParam("t",track.getTrack())
                 .get("/api/v1/orders/track")
                 .then()
@@ -149,7 +144,6 @@ public class ScooterServiceClient {
     public List<Order> getOrderListFromAnswerBody(ValidatableResponse response){
         return response.extract().jsonPath().getList("orders");
     }
-    @JsonIgnoreProperties(ignoreUnknown=true)
     @Step("Клиент - проверка тела ответа")
     public Order getOrderFromAnswerBody(ValidatableResponse response){
         return response.extract().jsonPath().getObject("order", Order.class);

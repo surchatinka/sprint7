@@ -6,13 +6,6 @@ public class Credentials {
     public String toString(){
         return String.format("{\"login\":\"%s\",\"password\":\"%s\" }",login,password);
     }
-//    public String toString() {
-//        return "Credentials{" +
-//                "login='" + login + '\'' +
-//                ", password='" + password + '\'' +
-//                '}';
-//    }
-
 
     private String login;
     private String password;

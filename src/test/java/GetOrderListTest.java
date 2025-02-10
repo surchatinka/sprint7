@@ -24,33 +24,25 @@ public class GetOrderListTest {
     public void before(){
         client = new ScooterServiceClient(BASE_URI);
         Courier courier = new Courier("j4k4l","courier","COURIER");
-
         client.createCourier(courier);
-
         ValidatableResponse responseLogin = client.login(Credentials.fromCourier(courier));
         idCourier = client.getIdFromAnswerBody(responseLogin);
-
         Order order1= new Order("Some","Person","Hawaii","5","82345678901",1,"2025-10-10","buratto",new ArrayList<>());
         ValidatableResponse responseTrack = client.createOrder(order1);
         track = client.getTrackFromAnswerBody(responseTrack);
-
         ValidatableResponse responseId = client.getOrder(track);
         String orderId = client.getOrderFromAnswerBody(responseId).getId();
-
         client.acceptOrder(idCourier,orderId);
     }
     @Test
     @DisplayName("Список заказов не пустой")
     @Description("После создания курьера, заказов и принятии заказа курьером в работу.")
     public void checkResponseContainsOrdersList_ok(){
-        //Шаг 1
         ValidatableResponse response = client.getOrders(idCourier);
-        //Шаг 2
-       int code = client.getStatusCode(response);
-       Assert.assertEquals(200,code);
-       //Шаг 3
-       List<Order> list = client.getOrderListFromAnswerBody(response);
-       Assert.assertNotNull(list);
+        int code = client.getStatusCode(response);
+        Assert.assertEquals(200,code);
+        List<Order> list = client.getOrderListFromAnswerBody(response);
+        Assert.assertNotNull(list);
     }
 
     @After

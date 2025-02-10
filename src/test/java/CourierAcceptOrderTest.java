@@ -13,8 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 
-
-
 public class CourierAcceptOrderTest {
 
     private ScooterServiceClient client;
@@ -25,20 +23,14 @@ public class CourierAcceptOrderTest {
 
     @Before
     public void before(){
-        //Предусловие шаг 1 - создали курьера
         client = new ScooterServiceClient(BASE_URI);
         Courier courier = new Courier("Usein", "usya", "Bolt");
         client.createCourier(courier);
-        //Предусловие шаг 2 - залогинились курьером
         ValidatableResponse loginResponse = client.login(Credentials.fromCourier(courier));
-        //Узнали его ид
         courierId = client.getIdFromAnswerBody(loginResponse);
-        //Предусловие шаг 3 создали заказ
         Order order = new Order("Namezz", "Surnamezz", "Addrezz", "33", "+23400000001", 5, "2025-12-12", " ", new ArrayList<>());
         ValidatableResponse createOrderResponse = client.createOrder(order);
-        //Получили его трек номер
         track = client.getTrackFromAnswerBody(createOrderResponse);
-        //По треку узнали ид
         ValidatableResponse getIdResponse = client.getOrder(track);
         Order orderWithId = client.getOrderFromAnswerBody(getIdResponse);
         orderId = orderWithId.getId();
@@ -54,7 +46,6 @@ public class CourierAcceptOrderTest {
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
     }
-
     @Test
     @DisplayName("Непринятие заказа курьером, без id курьера")
     public void NoCourierIdAcceptOrderTest_fail(){
@@ -64,7 +55,6 @@ public class CourierAcceptOrderTest {
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
-
     @Test
     @DisplayName("Непринятие заказа курьером, с несуществующим курьером")
     public void WrongIdCourierAcceptOrderTest_fail(){
@@ -75,7 +65,6 @@ public class CourierAcceptOrderTest {
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Курьера с таким id не существует",message);
     }
-
     @Test
     @DisplayName("Непринятие заказа курьером, без id заказа")
     @Issue("Ссылка на Баг репорт о неправильном ответе сервера")
@@ -86,7 +75,6 @@ public class CourierAcceptOrderTest {
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
-
     @Test
     @DisplayName("Непринятие заказа курьером, с неправильным номером заказа")
     public void WrongOrderNameAcceptOrderTest_fail(){

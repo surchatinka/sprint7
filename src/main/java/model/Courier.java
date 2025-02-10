@@ -1,9 +1,5 @@
 package model;
 
-import io.restassured.response.ValidatableResponse;
-
-import static io.restassured.RestAssured.given;
-
 public class Courier {
     private String login;
     private String password;

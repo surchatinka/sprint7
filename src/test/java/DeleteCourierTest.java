@@ -14,7 +14,6 @@ public class DeleteCourierTest {
     private ScooterServiceClient client;
     private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private String id;
-    //private Courier courier;
 
     @Before
     public void before(){
@@ -29,12 +28,9 @@ public class DeleteCourierTest {
     @DisplayName("Удаление существующего курьера")
     @Description("Базовый тест, на удаление существующего курьера")
     public void deleteCourierTest_ok(){
-        //Step 1
         ValidatableResponse response = client.deleteCourier(id);
-        //Step 2
         int code = client.getStatusCode(response);
         Assert.assertEquals(200,code);
-        //Step 3
         boolean ok = client.getOkFromAnswerBody(response);
         Assert.assertTrue(ok);
     }
@@ -43,15 +39,11 @@ public class DeleteCourierTest {
     @DisplayName("Отправка запроса на удаление без id")
     @Issue("Ссылка на багрепорт о неверном коде ошибки")
     public void deleteNoIdCourierTest_fail(){
-        //Step 1
         ValidatableResponse response = client.deleteCourier("");
-        //Step 2
         int code = client.getStatusCode(response);
         Assert.assertEquals(400,code);
-        //Step 3
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для удаления курьера",message);
-
         client.deleteCourier(id);
     }
 
@@ -60,12 +52,9 @@ public class DeleteCourierTest {
     @Issue("Ссылка на баг репорт о неверном теле ответа")
     public void deleteNotExistingCourierTest_fail(){
         client.deleteCourier(id);
-        //Step 1
         ValidatableResponse response = client.deleteCourier("");
-        //Step 2
         int code = client.getStatusCode(response);
         Assert.assertEquals(404,code);
-        //Step 3
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Курьера с таким id нет",message);
     }

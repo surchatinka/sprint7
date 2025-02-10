@@ -35,28 +35,22 @@ public class MakeOrderTest {
     @DisplayName("Создание заказа")
     @Description("Базовый тест, если цвет самоката - %1")
     public void makeOrderTest_ok(){
-        //Шаг 1
         ValidatableResponse response = client.createOrder(order);
-        //Шаг 2
         int code = client.getStatusCode(response);
         Assert.assertEquals(201,code);
-        //Шаг 3
         track = client.getTrackFromAnswerBody(response);
 
     }
     @Test
     @DisplayName("В теле ответа при создании заказа возвращается трек номер, если цвет самоката - %1")
     public void makeOrderTestReturnsTrackNumber_ok(){
-        //Шаг 1
         ValidatableResponse response = client.createOrder(order);
-        //Шаг 2
         track = client.getTrackFromAnswerBody(response);
         Assert.assertNotNull(track);
     }
 
     @Parameterized.Parameters
     public static Object[][] getParameters(){
-
         List<String> checkOne  = new ArrayList<>();
         checkOne.add("BLACK");
         List<String> checkTwo = new ArrayList<>();

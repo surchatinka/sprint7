@@ -1,8 +1,6 @@
 package model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
@@ -31,7 +29,6 @@ public class Order {
         this.comment = comment;
         this.color = colors;
     }
-    public Order(){}
 
     private String address;
     private String metroStation;

@@ -36,7 +36,6 @@ public class GetOrderIdFromTrackTest {
         Order order = client.getOrderFromAnswerBody(response);
         Assert.assertNotNull(order);
     }
-
     @Test
     @DisplayName("Неполучение заказа без трек номера")
     public void GetOrderWithoutTrack_fail(){
@@ -46,7 +45,6 @@ public class GetOrderIdFromTrackTest {
         String message = client.getMessageFromAnswerBody(response);
         Assert.assertEquals("Недостаточно данных для поиска",message);
     }
-
     @Test
     @DisplayName("Неполучение заказа с несуществующим заказом")
     public void GetOrderWithNoExistingTrack_fail(){
