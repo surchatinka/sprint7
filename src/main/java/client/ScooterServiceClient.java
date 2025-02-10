@@ -12,11 +12,9 @@ import java.util.List;
 
 public class ScooterServiceClient {
 
-    private final String baseURI;
+    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
 
-    public ScooterServiceClient(String baseURI) {
-        this.baseURI = baseURI;
-    }
+    public ScooterServiceClient() {}
 
     @Step("Клиент – создание курьера")
     public ValidatableResponse createCourier(Courier courier) {
@@ -24,7 +22,7 @@ public class ScooterServiceClient {
                 .filter(new AllureRestAssured())
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type", "application/json")
                 .body(courier)
                 .post("/api/v1/courier")
@@ -37,7 +35,7 @@ public class ScooterServiceClient {
         return given()
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type", "application/json")
                 .body(credentials.toString())
                 .post("/api/v1/courier/login")
@@ -51,7 +49,7 @@ public class ScooterServiceClient {
                     .filter(new AllureRestAssured())
                     .log()
                     .all()
-                    .baseUri(baseURI)
+                    .baseUri(BASE_URI)
                     .header("Content-Type", "application/json")
                     .delete(String.format("/api/v1/courier/%s",id)) //:
                     .then()
@@ -63,7 +61,7 @@ public class ScooterServiceClient {
         return given()
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type","application/json")
                 .body(order)
                 .post("/api/v1/orders")
@@ -77,7 +75,7 @@ public class ScooterServiceClient {
                 .filter(new AllureRestAssured())
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type", "application/json")
                 .body(track)
                 .put("/api/v1/orders/cancel")
@@ -91,7 +89,7 @@ public class ScooterServiceClient {
                 .filter(new AllureRestAssured())
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type", "application/json")
                 .queryParam("courierId",courierId)
                 .get("/api/v1/orders")
@@ -104,7 +102,7 @@ public class ScooterServiceClient {
         return given()
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .header("Content-Type","application/json")
                 .queryParam("courierId",courierId)
                 .put(String.format("/api/v1/orders/accept/%s",orderId))
@@ -117,7 +115,7 @@ public class ScooterServiceClient {
         return given()
                 .log()
                 .all()
-                .baseUri(baseURI)
+                .baseUri(BASE_URI)
                 .queryParam("t",track.getTrack())
                 .get("/api/v1/orders/track")
                 .then()

@@ -8,14 +8,13 @@ import model.Credentials;
 import org.junit.*;
 
 public class CreateCourierTest {
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private Courier courier;
     private int statusCode;
     private ScooterServiceClient client;
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
         courier = new Courier("jackson", "password", "peter");
     }
 

@@ -16,14 +16,13 @@ import java.util.ArrayList;
 public class CourierAcceptOrderTest {
 
     private ScooterServiceClient client;
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private String courierId;
     private String orderId;
     private Track track;
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
         Courier courier = new Courier("Usein", "usya", "Bolt");
         client.createCourier(courier);
         ValidatableResponse loginResponse = client.login(Credentials.fromCourier(courier));

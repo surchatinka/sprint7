@@ -17,12 +17,11 @@ public class GetOrderListTest {
 
     private ScooterServiceClient client;
     private String idCourier;
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private Track track;
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
         Courier courier = new Courier("j4k4l","courier","COURIER");
         client.createCourier(courier);
         ValidatableResponse responseLogin = client.login(Credentials.fromCourier(courier));

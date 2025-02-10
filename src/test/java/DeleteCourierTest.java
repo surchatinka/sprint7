@@ -12,12 +12,11 @@ import org.junit.Test;
 public class DeleteCourierTest {
 
     private ScooterServiceClient client;
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private String id;
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
         Courier courier = new Courier("vasya90210","vasya","pupkin");
         client.createCourier(courier);
         ValidatableResponse response = client.login(Credentials.fromCourier(courier));

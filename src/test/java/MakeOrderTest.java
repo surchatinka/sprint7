@@ -17,7 +17,6 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class MakeOrderTest {
 
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private final Order order;
     private ScooterServiceClient client;
     private Track track;
@@ -28,7 +27,7 @@ public class MakeOrderTest {
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
     }
 
     @Test

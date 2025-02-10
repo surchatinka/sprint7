@@ -29,6 +29,7 @@ public class Order {
         this.comment = comment;
         this.color = colors;
     }
+    public Order(){}
 
     private String address;
     private String metroStation;

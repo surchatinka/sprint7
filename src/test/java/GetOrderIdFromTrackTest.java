@@ -14,12 +14,11 @@ import java.util.ArrayList;
 public class GetOrderIdFromTrackTest {
 
     private ScooterServiceClient client;
-    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru/";
     private Track track;
 
     @Before
     public void before(){
-        client = new ScooterServiceClient(BASE_URI);
+        client = new ScooterServiceClient();
         Order order= new Order("Platypus","Teal","Cartoon","7","82341111111",1,"2025-11-11","comment",new ArrayList<>());
         ValidatableResponse responseCreate = client.createOrder(order);
         track = client.getTrackFromAnswerBody(responseCreate);
